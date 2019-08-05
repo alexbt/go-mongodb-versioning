@@ -16,7 +16,7 @@ type scriptImpl struct {
 type changeSets []Script
 
 func NewChangeSets(scripts ...Script) changeSets {
-	return []Script{}
+	return scripts
 }
 
 type meta struct {

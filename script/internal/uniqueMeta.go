@@ -48,13 +48,14 @@ func (u ScriptMeta) hasValidChecksum(result *mongo.SingleResult) bool {
 			if fetched.Md5 == v {
 				return true
 			}
-
 		}
+
+		er := fmt.Sprintf("Failing on %s-%s.%s (%s) - found %s", u.Author, u.UniqueName, u.Operation, u.Md5, fetched.Md5)
+		fmt.Println(er)
+		panic(errors.New(er))
 	}
 
-	er := fmt.Sprintf("Failing on %s-%s.%s (%s) - found %s", u.Author, u.UniqueName, u.Operation, u.Md5, fetched.Md5)
-	fmt.Println(er)
-	panic(errors.New(er))
+	return false
 }
 
 func (u ScriptMeta) Save(m *mongo.Database, ctx context.Context) (*mongo.InsertOneResult, error) {

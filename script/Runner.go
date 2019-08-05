@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/alexbt/go-mongodb-versioning/script/internal"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/globalsign/mgo/bson"
 	"reflect"
 )
 
@@ -49,10 +49,15 @@ func (r runner) Execute(changeSets changeSets) {
 		}
 
 		fmt.Printf("Executing %s-%s.%s (md5:%s - valids:%s)", meta.Author, meta.UniqueName, meta.Operation, meta.Md5, meta.ValidCheckSums)
+
+		internal.BackupCollection(ctx, connection, v.getMeta().collectionName)
+		fmt.Printf(" ...collection backed up")
+
 		v.execute(ctx, connection)
 		fmt.Printf(" ...Executed")
 
 		meta.Save(connection, ctx)
 		fmt.Printf(" ...Recorded")
+		fmt.Println()
 	}
 }
