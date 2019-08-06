@@ -12,7 +12,7 @@ type updateMany struct {
 	Value  bsonx.Doc
 }
 
-func (op scriptImpl) UpdateMany(filter bsonx.Doc, value bsonx.Doc) Script {
+func (op scriptWithOperation) WithUpdateMany(filter bsonx.Doc, value bsonx.Doc) Script {
 	return updateMany{op.meta, filter, value}
 }
 

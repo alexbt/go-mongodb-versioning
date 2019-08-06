@@ -12,7 +12,7 @@ type replaceOneNative struct {
 	Value  string
 }
 
-func (op scriptImpl) ReplaceOneNative(filter string, value string) Script {
+func (op scriptWithOperation) WithReplaceOneNative(filter string, value string) Script {
 	return replaceOneNative{op.meta, filter, value}
 }
 

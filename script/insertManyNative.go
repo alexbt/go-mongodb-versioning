@@ -11,7 +11,7 @@ type insertManyNative struct {
 	Value string
 }
 
-func (op scriptImpl) InsertManyNative(value string) Script {
+func (op scriptWithOperation) WithInsertManyNative(value string) Script {
 	return insertManyNative{op.meta, value}
 }
 

@@ -11,7 +11,7 @@ type insertMany struct {
 	Value []bsonx.Doc
 }
 
-func (op scriptImpl) InsertMany(value []bsonx.Doc) Script {
+func (op scriptWithOperation) WithInsertMany(value []bsonx.Doc) Script {
 	return insertMany{op.meta, value}
 }
 

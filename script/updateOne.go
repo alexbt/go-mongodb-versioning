@@ -12,7 +12,7 @@ type updateOne struct {
 	Value  bsonx.Doc
 }
 
-func (op scriptImpl) UpdateOne(filter bsonx.Doc, value bsonx.Doc) Script {
+func (op scriptWithOperation) WithUpdateOne(filter bsonx.Doc, value bsonx.Doc) Script {
 	return updateOne{op.meta, filter, value}
 }
 

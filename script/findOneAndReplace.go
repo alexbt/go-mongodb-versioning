@@ -12,7 +12,7 @@ type findOneAndUpdate struct {
 	Value  bsonx.Doc
 }
 
-func (op scriptImpl) FindOneAndUpdate(filter bsonx.Doc, value bsonx.Doc) Script {
+func (op scriptWithOperation) WithFindOneAndUpdate(filter bsonx.Doc, value bsonx.Doc) Script {
 	return findOneAndUpdate{op.meta, filter, value}
 }
 

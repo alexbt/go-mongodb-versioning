@@ -6,8 +6,8 @@ import (
 
 func FirstInsert() script.Script {
 	return script.NewScript().
-		Meta("alexbt", "insert", "blah", "88783e207575d858cc48450468500970").
-		UpdateManyNative(
+		WithMeta("alexbt", "insert", "blah", "88783e207575d858cc48450468500970").
+		WithUpdateManyNative(
 			"{}",
 			`{$set: {"yo": "blah3"}}`)
 }

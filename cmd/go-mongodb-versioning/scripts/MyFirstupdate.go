@@ -6,7 +6,7 @@ import (
 
 func MyFirst() script.Script {
 	return script.NewScript().
-		Meta("alexbt", "name", "blah", "0226183a64c83de70570cd422e11e9cf").
-		UpdateManyNative("{}",
+		WithMeta("alexbt", "name", "blah", "0226183a64c83de70570cd422e11e9cf").
+		WithUpdateManyNative("{}",
 			`{$set: {"yo": "blah2"}}`)
 }

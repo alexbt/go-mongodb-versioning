@@ -11,7 +11,7 @@ type findOneAndDeleteNative struct {
 	Filter string
 }
 
-func (op scriptImpl) FindOneAndDeleteNative(filter string) Script {
+func (op scriptWithOperation) WithFindOneAndDeleteNative(filter string) Script {
 	return findOneAndDeleteNative{op.meta, filter}
 }
 

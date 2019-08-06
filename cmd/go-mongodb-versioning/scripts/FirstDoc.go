@@ -7,8 +7,8 @@ import (
 
 func FirstDoc() script.Script {
 	return script.NewScript().
-		Meta("alexbt", "firstdoc", "blah", "80d85b1494d0de47064015c86cd44eb0").
-		UpdateMany(
+		WithMeta("alexbt", "firstdoc", "80d85b1494d0de47064015c86cd44eb0").
+		WithUpdateMany(
 			bsonx.Doc{},
 			bsonx.Doc{
 				{"$set", bsonx.Document(bsonx.Doc{

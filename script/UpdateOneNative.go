@@ -12,7 +12,7 @@ type updateOneNative struct {
 	Value  string
 }
 
-func (op scriptImpl) UpdateOneNative(filter string, value string) Script {
+func (op scriptWithOperation) WithUpdateOneNative(filter string, value string) Script {
 	return updateOneNative{op.meta, filter, value}
 }
 

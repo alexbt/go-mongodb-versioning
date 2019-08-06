@@ -11,7 +11,7 @@ type deleteMany struct {
 	Value bsonx.Doc
 }
 
-func (op scriptImpl) DeleteMany(value bsonx.Doc) Script {
+func (op scriptWithOperation) WithWithDeleteMany(value bsonx.Doc) Script {
 	return deleteMany{op.meta, value}
 }
 

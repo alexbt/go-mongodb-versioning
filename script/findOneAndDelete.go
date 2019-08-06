@@ -11,7 +11,7 @@ type findOneAndDelete struct {
 	Filter bsonx.Doc
 }
 
-func (op scriptImpl) FindOneAndDelete(filter bsonx.Doc) Script {
+func (op scriptWithOperation) WithFindOneAndDelete(filter bsonx.Doc) Script {
 	return findOneAndDelete{op.meta, filter}
 }
 

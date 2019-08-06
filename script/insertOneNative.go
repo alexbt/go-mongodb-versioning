@@ -11,7 +11,7 @@ type insertOneNative struct {
 	Value string
 }
 
-func (op scriptImpl) InsertOneNative(value string) Script {
+func (op scriptWithOperation) WithInsertOneNative(value string) Script {
 	return insertOneNative{op.meta, value}
 }
 

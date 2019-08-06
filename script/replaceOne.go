@@ -12,7 +12,7 @@ type replaceOne struct {
 	Value  bsonx.Doc
 }
 
-func (op scriptImpl) ReplaceOne(filter bsonx.Doc, value bsonx.Doc) Script {
+func (op scriptWithOperation) WithReplaceOne(filter bsonx.Doc, value bsonx.Doc) Script {
 	return replaceOne{op.meta, filter, value}
 }
 

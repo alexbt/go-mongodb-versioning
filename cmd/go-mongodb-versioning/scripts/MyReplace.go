@@ -6,8 +6,8 @@ import (
 
 func MyReplace() script.Script {
 	return script.NewScript().
-		Meta("alexbt", "insert2", "blah", "bbb47067604603eddfa514fbcb30533b").
-		ReplaceOneNative(
+		WithMeta("alexbt", "insert2", "blah", "bbb47067604603eddfa514fbcb30533b").
+		WithReplaceOneNative(
 			`{}`,
 			`{"coucou": "damn"}`)
 }

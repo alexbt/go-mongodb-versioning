@@ -12,7 +12,7 @@ type findOneAndReplaceNative struct {
 	Value  string
 }
 
-func (op scriptImpl) FindOneAndReplaceNative(filter string, value string) Script {
+func (op scriptWithOperation) WithFindOneAndReplaceNative(filter string, value string) Script {
 	return findOneAndReplaceNative{op.meta, filter, value}
 }
 

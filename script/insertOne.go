@@ -12,7 +12,7 @@ type insertOne struct {
 	Value bsonx.Doc
 }
 
-func (op scriptImpl) InsertOne(value bsonx.Doc) Script {
+func (op scriptWithOperation) WithInsertOne(value bsonx.Doc) Script {
 	return insertOne{op.meta, value}
 }
 

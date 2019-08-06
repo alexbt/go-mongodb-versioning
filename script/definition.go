@@ -2,6 +2,7 @@ package script
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -9,14 +10,13 @@ type Script interface {
 	execute(ctx context.Context, m *mongo.Database)
 	getMeta() meta
 }
-type scriptImpl struct {
+type changeSets []Script
+
+type scriptWithOperation struct {
 	*meta
 }
 
-type changeSets []Script
-
-func NewChangeSets(scripts ...Script) changeSets {
-	return scripts
+type scriptImplWithMeta struct {
 }
 
 type meta struct {
@@ -26,25 +26,24 @@ type meta struct {
 	validCheckSums []string
 }
 
-//func NewMeta(author string, uniqueName string, collectionName string, validCheckSums ...string) *meta {
-//	return &meta{
-//		uniqueName:     uniqueName,
-//		author:         author,
-//		collectionName: collectionName,
-//		validCheckSums: validCheckSums,
-//	}
-//}
-
-func NewScript() *scriptImpl {
-	return &scriptImpl{}
+func NewChangeSets(scripts ...Script) changeSets {
+	if scripts == nil {
+		panic(errors.New("Cannot initialize with nil changeSet"))
+	}
+	return scripts
 }
 
-func (op *scriptImpl) Meta(author string, uniqueName string, collectionName string, validCheckSums ...string) *scriptImpl {
-	op.meta = &meta{
-		uniqueName:     uniqueName,
-		author:         author,
-		collectionName: collectionName,
-		validCheckSums: validCheckSums,
+func NewScript() *scriptImplWithMeta {
+	return &scriptImplWithMeta{}
+}
+
+func (op *scriptImplWithMeta) WithMeta(author string, uniqueName string, collectionName string, validCheckSums ...string) *scriptWithOperation {
+	return &scriptWithOperation{
+		&meta{
+			uniqueName:     uniqueName,
+			author:         author,
+			collectionName: collectionName,
+			validCheckSums: validCheckSums,
+		},
 	}
-	return op
 }

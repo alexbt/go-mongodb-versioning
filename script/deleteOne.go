@@ -11,7 +11,7 @@ type deleteOne struct {
 	Value bsonx.Doc
 }
 
-func (op scriptImpl) DeleteOne(value bsonx.Doc) Script {
+func (op scriptWithOperation) WithDeleteOne(value bsonx.Doc) Script {
 	return deleteOne{op.meta, value}
 }
 

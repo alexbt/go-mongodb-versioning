@@ -6,10 +6,10 @@ import (
 
 func SecondInsert() script.Script {
 	return script.NewScript().
-		Meta(
+		WithMeta(
 			"alexbt",
 			"insert2",
 			"blah", "bbb47067604603eddfa514fbcb30533b").
-		InsertOneNative(
+		WithInsertOneNative(
 			`{"coucou": "damn"}`)
 }

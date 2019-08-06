@@ -11,7 +11,7 @@ type deleteManyNative struct {
 	Value string
 }
 
-func (op scriptImpl) DeleteManyNative(value string) Script {
+func (op scriptWithOperation) WithDeleteManyNative(value string) Script {
 	return deleteManyNative{op.meta, value}
 }
 
