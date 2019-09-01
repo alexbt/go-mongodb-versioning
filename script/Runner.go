@@ -7,18 +7,26 @@ import (
 	"fmt"
 	"github.com/alexbt/go-mongodb-versioning/script/internal"
 	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"reflect"
 )
 
 type runner struct {
-	DbName     string
-	Connection string
+	dbName string
+	client *mongo.Client
 }
 
 func NewRunner(DbName string, connection string) *runner {
 	return &runner{
-		DbName:     DbName,
-		Connection: connection,
+		dbName: DbName,
+		client: internal.GetClient(connection),
+	}
+}
+
+func NewRunnerWithClient(DbName string, client *mongo.Client) *runner {
+	return &runner{
+		dbName: DbName,
+		client: client,
 	}
 }
 
@@ -31,7 +39,6 @@ func (r runner) Execute(changeSets changeSets) {
 		mymap[v.getMeta().uniqueName] = true
 	}
 
-	connection := internal.OpenConnection(r.DbName, r.Connection)
 	ctx := context.Background()
 
 	for _, v := range changeSets {
@@ -43,20 +50,22 @@ func (r runner) Execute(changeSets changeSets) {
 			Md5:            fmt.Sprintf("%x", md5.Sum(bytesForMd5)),
 			ValidCheckSums: v.getMeta().validCheckSums,
 		}
-		if meta.HasRun(connection, ctx) {
+
+		db := r.client.Database(r.dbName)
+		if meta.HasRun(db, ctx) {
 			fmt.Println(fmt.Sprintf("Skipping %s-%s.%s (md5:%s - valids:%s)", meta.Author, meta.UniqueName, meta.Operation, meta.Md5, meta.ValidCheckSums))
 			continue
 		}
 
 		fmt.Printf("Executing %s-%s.%s (md5:%s - valids:%s)", meta.Author, meta.UniqueName, meta.Operation, meta.Md5, meta.ValidCheckSums)
 
-		internal.BackupCollection(ctx, connection, v.getMeta().collectionName)
+		internal.BackupCollection(ctx, db, v.getMeta().collectionName)
 		fmt.Printf(" ...collection backed up")
 
-		v.execute(ctx, connection)
+		v.execute(ctx, db)
 		fmt.Printf(" ...Executed")
 
-		meta.Save(connection, ctx)
+		meta.Save(db, ctx)
 		fmt.Printf(" ...Recorded")
 		fmt.Println()
 	}

@@ -21,6 +21,20 @@ func OpenConnection(dbname string, url string) *mongo.Database {
 	return client.Database(dbname)
 }
 
+func GetClient(url string) *mongo.Client {
+	client, err := mongo.NewClient(options.Client().ApplyURI(url))
+	if err != nil {
+		panic(err)
+	}
+
+	ctx := context.Background()
+	err = client.Connect(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return client
+}
+
 func BackupCollection(ctx context.Context, connection *mongo.Database, collName string) {
 	var all interface{}
 	bson.UnmarshalJSON([]byte(`{}`), &all)
