@@ -42,7 +42,11 @@ func (r runner) Execute(changeSets changeSets) {
 	ctx := context.Background()
 
 	for _, v := range changeSets {
-		bytesForMd5, _ := bson.Marshal(v.getContent())
+		content := append(v.getContent(), v.getMeta())
+		bytesForMd5, _ := bson.Marshal(content)
+		bytesForMd52, _ := bson.Marshal(v.getContent())
+		fmt.Print(fmt.Sprintf("%x", md5.Sum(bytesForMd5)))
+		fmt.Print(fmt.Sprintf("%x", md5.Sum(bytesForMd52)))
 		meta := internal.ScriptMeta{
 			Operation:      reflect.TypeOf(v).Name(),
 			UniqueName:     v.getMeta().uniqueName,
