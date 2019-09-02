@@ -42,13 +42,13 @@ func (r runner) Execute(changeSets changeSets) {
 	ctx := context.Background()
 
 	for _, v := range changeSets {
-		bytesForMd5, _ := bson.Marshal(v)
+		bytesForMd5, _ := bson.Marshal(v.getContent())
 		meta := internal.ScriptMeta{
 			Operation:      reflect.TypeOf(v).Name(),
 			UniqueName:     v.getMeta().uniqueName,
 			Author:         v.getMeta().author,
 			Md5:            fmt.Sprintf("%x", md5.Sum(bytesForMd5)),
-			ValidCheckSums: v.getMeta().validCheckSums,
+			ValidCheckSums: v.getValidChecksums(),
 		}
 
 		db := r.client.Database(r.dbName)

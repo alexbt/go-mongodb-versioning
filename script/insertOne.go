@@ -9,11 +9,12 @@ import (
 
 type insertOne struct {
 	*meta
-	Value bsonx.Doc
+	Value          bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithInsertOne(value bsonx.Doc) Script {
-	return insertOne{op.meta, value}
+	return insertOne{op.meta, value, op.validCheckSums}
 }
 
 func (u insertOne) execute(ctx context.Context, m *mongo.Database) {
@@ -22,4 +23,12 @@ func (u insertOne) execute(ctx context.Context, m *mongo.Database) {
 
 func (u insertOne) getMeta() meta {
 	return *u.meta
+}
+
+func (u insertOne) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u insertOne) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

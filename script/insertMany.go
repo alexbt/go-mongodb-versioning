@@ -8,11 +8,12 @@ import (
 
 type insertMany struct {
 	*meta
-	Value []bsonx.Doc
+	Value          []bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithInsertMany(value []bsonx.Doc) Script {
-	return insertMany{op.meta, value}
+	return insertMany{op.meta, value, op.validCheckSums}
 }
 
 func (u insertMany) execute(ctx context.Context, m *mongo.Database) {
@@ -27,4 +28,12 @@ func (u insertMany) execute(ctx context.Context, m *mongo.Database) {
 
 func (u insertMany) getMeta() meta {
 	return *u.meta
+}
+
+func (u insertMany) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u insertMany) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

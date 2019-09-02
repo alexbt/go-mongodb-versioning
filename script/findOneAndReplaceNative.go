@@ -8,12 +8,13 @@ import (
 
 type findOneAndUpdateNative struct {
 	*meta
-	Filter string
-	Value  string
+	Filter         string
+	Value          string
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithFindOneAndUpdateNative(filter string, value string) Script {
-	return findOneAndUpdateNative{op.meta, filter, value}
+	return findOneAndUpdateNative{op.meta, filter, value, op.validCheckSums}
 }
 
 func (u findOneAndUpdateNative) execute(ctx context.Context, m *mongo.Database) {
@@ -28,4 +29,12 @@ func (u findOneAndUpdateNative) execute(ctx context.Context, m *mongo.Database) 
 
 func (u findOneAndUpdateNative) getMeta() meta {
 	return *u.meta
+}
+
+func (u findOneAndUpdateNative) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u findOneAndUpdateNative) getContent() []interface{} {
+	return []interface{}{u.Filter, u.Value}
 }

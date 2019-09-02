@@ -8,11 +8,12 @@ import (
 
 type deleteMany struct {
 	*meta
-	Value bsonx.Doc
+	Value          bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithWithDeleteMany(value bsonx.Doc) Script {
-	return deleteMany{op.meta, value}
+	return deleteMany{op.meta, value, op.validCheckSums}
 }
 
 func (u deleteMany) execute(ctx context.Context, m *mongo.Database) {
@@ -21,4 +22,12 @@ func (u deleteMany) execute(ctx context.Context, m *mongo.Database) {
 
 func (u deleteMany) getMeta() meta {
 	return *u.meta
+}
+
+func (u deleteMany) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u deleteMany) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

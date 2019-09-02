@@ -8,11 +8,12 @@ import (
 
 type findOneAndDelete struct {
 	*meta
-	Filter bsonx.Doc
+	Filter         bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithFindOneAndDelete(filter bsonx.Doc) Script {
-	return findOneAndDelete{op.meta, filter}
+	return findOneAndDelete{op.meta, filter, op.validCheckSums}
 }
 
 func (u findOneAndDelete) execute(ctx context.Context, m *mongo.Database) {
@@ -21,4 +22,12 @@ func (u findOneAndDelete) execute(ctx context.Context, m *mongo.Database) {
 
 func (u findOneAndDelete) getMeta() meta {
 	return *u.meta
+}
+
+func (u findOneAndDelete) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u findOneAndDelete) getContent() []interface{} {
+	return []interface{}{u.Filter}
 }

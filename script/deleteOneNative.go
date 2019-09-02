@@ -8,11 +8,12 @@ import (
 
 type deleteOneNative struct {
 	*meta
-	Value string
+	Value          string
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithDeleteOneNative(value string) Script {
-	return deleteOneNative{op.meta, value}
+	return deleteOneNative{op.meta, value, op.validCheckSums}
 }
 
 func (u deleteOneNative) execute(ctx context.Context, m *mongo.Database) {
@@ -23,4 +24,12 @@ func (u deleteOneNative) execute(ctx context.Context, m *mongo.Database) {
 
 func (u deleteOneNative) getMeta() meta {
 	return *u.meta
+}
+
+func (u deleteOneNative) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u deleteOneNative) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

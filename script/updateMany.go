@@ -8,12 +8,18 @@ import (
 
 type updateMany struct {
 	*meta
-	Filter bsonx.Doc
-	Value  bsonx.Doc
+	Filter         bsonx.Doc
+	Value          bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithUpdateMany(filter bsonx.Doc, value bsonx.Doc) Script {
-	return updateMany{op.meta, filter, value}
+	return updateMany{
+		op.meta,
+		filter,
+		value,
+		op.validCheckSums,
+	}
 }
 
 func (u updateMany) execute(ctx context.Context, m *mongo.Database) {
@@ -22,4 +28,12 @@ func (u updateMany) execute(ctx context.Context, m *mongo.Database) {
 
 func (u updateMany) getMeta() meta {
 	return *u.meta
+}
+
+func (u updateMany) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u updateMany) getContent() []interface{} {
+	return []interface{}{u.Filter, u.Value}
 }

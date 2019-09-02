@@ -8,11 +8,12 @@ import (
 
 type deleteOne struct {
 	*meta
-	Value bsonx.Doc
+	Value          bsonx.Doc
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithDeleteOne(value bsonx.Doc) Script {
-	return deleteOne{op.meta, value}
+	return deleteOne{op.meta, value, op.validCheckSums}
 }
 
 func (u deleteOne) execute(ctx context.Context, m *mongo.Database) {
@@ -21,4 +22,12 @@ func (u deleteOne) execute(ctx context.Context, m *mongo.Database) {
 
 func (u deleteOne) getMeta() meta {
 	return *u.meta
+}
+
+func (u deleteOne) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u deleteOne) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

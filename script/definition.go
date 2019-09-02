@@ -9,11 +9,14 @@ import (
 type Script interface {
 	execute(ctx context.Context, m *mongo.Database)
 	getMeta() meta
+	getValidChecksums() []string
+	getContent() []interface{}
 }
 type changeSets []Script
 
 type scriptWithOperation struct {
 	*meta
+	validCheckSums []string
 }
 
 type scriptImplWithMeta struct {
@@ -23,7 +26,6 @@ type meta struct {
 	uniqueName     string
 	author         string
 	collectionName string
-	validCheckSums []string
 }
 
 func NewChangeSets(scripts ...Script) changeSets {
@@ -43,7 +45,7 @@ func (op *scriptImplWithMeta) WithMeta(author string, uniqueName string, collect
 			uniqueName:     uniqueName,
 			author:         author,
 			collectionName: collectionName,
-			validCheckSums: validCheckSums,
 		},
+		validCheckSums,
 	}
 }

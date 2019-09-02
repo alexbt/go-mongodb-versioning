@@ -8,11 +8,12 @@ import (
 
 type insertManyNative struct {
 	*meta
-	Value string
+	Value          string
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithInsertManyNative(value string) Script {
-	return insertManyNative{op.meta, value}
+	return insertManyNative{op.meta, value, op.validCheckSums}
 }
 
 func (u insertManyNative) execute(ctx context.Context, m *mongo.Database) {
@@ -23,4 +24,12 @@ func (u insertManyNative) execute(ctx context.Context, m *mongo.Database) {
 
 func (u insertManyNative) getMeta() meta {
 	return *u.meta
+}
+
+func (u insertManyNative) getValidChecksums() []string {
+	return u.validCheckSums
+}
+
+func (u insertManyNative) getContent() []interface{} {
+	return []interface{}{u.Value}
 }

@@ -8,12 +8,18 @@ import (
 
 type replaceOneNative struct {
 	*meta
-	Filter string
-	Value  string
+	Filter         string
+	Value          string
+	validCheckSums []string
 }
 
 func (op scriptWithOperation) WithReplaceOneNative(filter string, value string) Script {
-	return replaceOneNative{op.meta, filter, value}
+	return replaceOneNative{
+		op.meta,
+		filter,
+		value,
+		op.validCheckSums,
+	}
 }
 
 func (u replaceOneNative) execute(ctx context.Context, m *mongo.Database) {
@@ -28,4 +34,12 @@ func (u replaceOneNative) execute(ctx context.Context, m *mongo.Database) {
 
 func (u replaceOneNative) getMeta() meta {
 	return *u.meta
+}
+
+func (u replaceOneNative) getContent() []interface{} {
+	return []interface{}{u.Filter, u.Value}
+}
+
+func (u replaceOneNative) getValidChecksums() []string {
+	return u.validCheckSums
 }
